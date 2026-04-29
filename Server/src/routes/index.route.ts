@@ -12,6 +12,6 @@
 //     this.initializeRoutes();
 //   }
 //   private initializeRoutes() {
-// this.app.use('/token', tokenRoute.route);
-// this.app.use('/user', userRoute.route);}
+// this.app.use('/token', this.tokenRoute.route);
+// this.app.use('/user', this.userRoute.route);}
 // }
