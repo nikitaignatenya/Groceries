@@ -12,8 +12,8 @@ class TokenRoute implements iRoutes {
   }
 
   private initializeRoutes(): void {
-    this.router.post(`${this.path}/activate`, this.tokenController.activateToken);
-    this.router.post(`${this.path}/refresh`, this.tokenController.refreshToken);
+    this.router.post(`/activate`, this.tokenController.activateToken);
+    this.router.post(`/refresh`, this.tokenController.refreshToken);
   }
 }
 export default TokenRoute;

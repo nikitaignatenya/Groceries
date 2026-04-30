@@ -22,7 +22,8 @@ class UserController {
   };
   regUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      buildResponse(res, 200, this.userService.regUser());
+      const { email, password } = req.body;
+      buildResponse(res, 200, this.userService.regUser(email, password));
     } catch (error) {
       next(error);
     }

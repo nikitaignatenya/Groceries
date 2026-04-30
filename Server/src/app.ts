@@ -1,6 +1,6 @@
 import express from 'express';
 import { PORT } from '@config/dotenv.config';
-import { iRoutes } from '@interfaces/router.interface';
+import { iRoutes, iAppRoute } from '@interfaces/router.interface';
 import cors from 'cors';
 import { errorMiddleware } from '@middlewares/error.middleware';
 import cookieParser from 'cookie-parser';
@@ -10,7 +10,7 @@ class App {
   public port: number | string;
   public app: express.Application;
 
-  constructor(routes: Array<iRoutes>) {
+  constructor(routes: Array<iAppRoute>) {
     this.port = PORT || 3000;
     this.app = express();
 
@@ -37,9 +37,9 @@ class App {
     this.app.use(express.urlencoded({ extended: true }));
   }
 
-  private initializeRoutes(routes: Array<iRoutes>) {
+  private initializeRoutes(routes: Array<iAppRoute>) {
     routes.forEach(route => {
-      this.app.use('/api', route.router);
+      this.app.use('/api', route.app);
     });
   }
 
