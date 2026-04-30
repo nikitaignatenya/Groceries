@@ -1,19 +1,18 @@
-import { HttpException } from '@exceptions/HttpException';
-import { ExceptionType } from '@exceptions/exceptions.type';
 import { UserRepository } from '@repositories/user.repository';
 import { MailService } from '@services/mail.service';
 import { TokenService } from './token.service';
+import { TokenRepository } from '@repositories/token.repository';
 import { UserDto } from '@dtos/user.dto';
-import User from '@models/user.model';
+import { iUser } from '@interfaces/user.model.interface';
 import bcrypt from 'bcrypt';
 import uuid from 'uuid';
-import { log } from 'node:console';
 
 export class UserService {
   private salt = 10;
   public userRepository = new UserRepository();
   public mailService = new MailService();
   private tokenService = new TokenService();
+  private tokenRepository = new TokenRepository();
 
   private async readUsers(): Promise<void> {}
 
@@ -25,16 +24,20 @@ export class UserService {
     return this.readUsers();
   }
 
-  async regUser(email: string, password: string) {
+  async regUser(email: string, password: string): Promise<iUser> {
     const hashPassword = await bcrypt.hash(password, this.salt);
     const activationLink = uuid.v4();
     await this.mailService.sendActivationMail(email, activationLink);
-    const tokens = this.tokenService.generateTokens('any');
-
-    const user = await this.userRepository.regUSer(email, hashPassword, activationLink);
+    const user = await this.userRepository.regUser(email, hashPassword, activationLink);
     console.log(user);
 
-    return user;
+    const userDto = new UserDto(user);
+    const tokens = this.tokenService.generateTokens({ ...userDto });
+    await this.tokenRepository.saveToken(userDto.id, tokens.refreshToken);
+    return {
+      ...tokens,
+      user: userDto,
+    };
   }
 
   async loginUser() {}

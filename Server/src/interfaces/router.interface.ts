@@ -6,6 +6,6 @@ export interface iRoutes {
 
 export interface iAppRoute {
   app: express.Application;
-  tokenRoute: iRoutes;
+  // tokenRoute: iRoutes;
   userRoute: iRoutes;
 }

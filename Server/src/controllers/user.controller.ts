@@ -23,7 +23,9 @@ class UserController {
   regUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const { email, password } = req.body;
-      buildResponse(res, 200, this.userService.regUser(email, password));
+      const userData = await this.userService.regUser(email, password);
+      buildResponse(res, 200, userData);
+      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
     } catch (error) {
       next(error);
     }

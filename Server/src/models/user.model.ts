@@ -1,8 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/database.config';
-import { UserAttributes, UserCreationAttributes } from '@interfaces/user.model.interface';
+import { iUserAttributes, iUserCreationAttributes } from '@interfaces/user.model.interface';
 
-export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
+export class User extends Model<iUserAttributes, iUserCreationAttributes> implements iUserAttributes {
   public id!: number;
   public email!: string;
   public password!: string;
@@ -31,7 +31,8 @@ User.init(
     },
     name: {
       type: DataTypes.STRING(100),
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     isActivated: {
       type: DataTypes.BOOLEAN,
@@ -53,7 +54,7 @@ User.init(
     sequelize,
     tableName: 'users',
     timestamps: true,
-    underscored: true, // createdAt -> created_at в БД
+    // underscored: true, // createdAt -> created_at в БД
   },
 );
 
