@@ -11,11 +11,11 @@ class UserRoute implements iRoutes {
   }
 
   private initializeRoutes(): void {
-    this.router.get(`${this.path}/`, this.userController.getAllUsers);
-    this.router.get(`${this.path}/:id`, this.userController.getUserById);
-    this.router.post(`${this.path}/registration`, this.userController.regUser);
-    this.router.post(`${this.path}/login`, this.userController.loginUser);
-    this.router.post(`${this.path}/logout`, this.userController.logoutUser);
+    this.router.get(`/`, this.userController.getAllUsers);
+    this.router.get(`/:id`, this.userController.getUserById);
+    this.router.post(`/registration`, this.userController.regUser);
+    this.router.post(`/login`, this.userController.loginUser);
+    this.router.post(`/logout`, this.userController.logoutUser);
   }
 }
 

@@ -1,4 +1,4 @@
 import App from '@app';
-import UserRoute from '@routes/user.route';
+import { AppRoute } from '@routes/app.route';
 
-new App([new UserRoute()]);
+new App([new AppRoute()]);
