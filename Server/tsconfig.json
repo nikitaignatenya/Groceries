@@ -11,7 +11,8 @@
       "@middlewares/*": ["./src/middlewares/*"],
       "@models/*": ["./src/models/*"],
       "@routes/*": ["./src/routes/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@dto/*": ["./src/dto/*"]
     },
     "target": "es2022",
     "esModuleInterop": true,

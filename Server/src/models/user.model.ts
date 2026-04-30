@@ -8,7 +8,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
   public password!: string;
   public name!: string;
   public isActivated!: boolean;
-  public activatedLink!: boolean;
+  public activatedLink!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -50,9 +50,9 @@ User.init(
     },
   },
   {
-    sequelize, 
+    sequelize,
     tableName: 'users',
-    timestamps: true, 
+    timestamps: true,
     underscored: true, // createdAt -> created_at в БД
   },
 );
