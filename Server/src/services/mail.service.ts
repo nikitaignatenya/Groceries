@@ -1,1 +1,3 @@
-export class MailService {}
+export class MailService {
+  async sendActivationMail(to, link) {}
+}

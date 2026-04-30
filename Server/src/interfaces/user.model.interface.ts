@@ -5,7 +5,7 @@ export interface UserAttributes {
   password: string;
   name: string;
   isActivated: boolean;
-  activatedLink: boolean;
+  activatedLink: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
