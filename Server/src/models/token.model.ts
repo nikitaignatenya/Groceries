@@ -11,26 +11,26 @@ export class Token extends Model<iTokenAttributes, iTokenCreationAttributes> imp
 Token.init(
   {
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      // allowNull: false,
       references: {
-        model: 'Users',
+        model: 'users',
         key: 'id',
       },
     },
     refreshToken: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
       allowNull: false,
     },
   },
   {
     sequelize,
-    tableName: 'Token',
+    tableName: 'tokens',
     // underscored: true,
   },
 );

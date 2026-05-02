@@ -29,11 +29,12 @@ export class UserService {
     const activationLink = uuid.v4();
     await this.mailService.sendActivationMail(email, activationLink);
     const user = await this.userRepository.regUser(email, hashPassword, activationLink);
-    console.log(user);
 
     const userDto = new UserDto(user);
     const tokens = this.tokenService.generateTokens({ ...userDto });
     await this.tokenRepository.saveToken(userDto.id, tokens.refreshToken);
+    console.log(user);
+
     return {
       ...tokens,
       user: userDto,

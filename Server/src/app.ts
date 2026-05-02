@@ -5,6 +5,8 @@ import cors from 'cors';
 import { errorMiddleware } from '@middlewares/error.middleware';
 import cookieParser from 'cookie-parser';
 import { sequelize } from '@config/database.config';
+import User from '@models/user.model';
+import Token from '@models/token.model';
 
 class App {
   public port: number | string;
@@ -24,6 +26,9 @@ class App {
   private async connectToDatabase(): Promise<void> {
     try {
       await sequelize.authenticate();
+      await User.sync({ alter: true });
+      await Token.sync({ alter: true });
+      
       console.log('PostgreSQL connected successfully');
     } catch (error) {
       console.error('Database connection failed:', error);
