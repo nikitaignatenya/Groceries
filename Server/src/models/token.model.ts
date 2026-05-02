@@ -31,7 +31,6 @@ Token.init(
   {
     sequelize,
     tableName: 'tokens',
-    // underscored: true,
   },
 );
 
