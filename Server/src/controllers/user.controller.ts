@@ -7,15 +7,17 @@ class UserController {
   private userService = new UserService();
   getAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      buildResponse(res, 200, await this.userService.getAllUsers());
+      const usersData = await this.userService.getAllUsers();
+      buildResponse(res, 200, usersData);
     } catch (error) {
       next(error);
     }
   };
-  getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { id } = req.body;
-      buildResponse(res, 200, this.userService.getUserById(id));
+      const { id } = req.params;
+      const userData = await this.userService.getUserById(id);
+      buildResponse(res, 200, userData);
     } catch (error) {
       next(error);
     }
@@ -24,8 +26,8 @@ class UserController {
     try {
       const { email, password } = req.body;
       const userData = await this.userService.regUser(email, password);
-      buildResponse(res, 200, userData);
       res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+      buildResponse(res, 200, userData);
     } catch (error) {
       next(error);
     }

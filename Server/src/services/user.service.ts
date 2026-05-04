@@ -14,14 +14,13 @@ export class UserService {
   private tokenService = new TokenService();
   private tokenRepository = new TokenRepository();
 
-  private async readUsers(): Promise<void> {}
-
-  async getAllUsers() {
-    return this.readUsers();
+  public async getAllUsers() {
+    const users = await this.userRepository.getAllUsers();
+    return users;
   }
-
   async getUserById(id) {
-    return this.readUsers();
+    const user = await this.userRepository.getUserById(id);
+    return user;
   }
 
   async regUser(email: string, password: string): Promise<iUser> {
