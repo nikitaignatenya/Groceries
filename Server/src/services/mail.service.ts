@@ -16,7 +16,7 @@ export class MailService {
       },
     });
   }
-  async sendActivationMail(to, link) {
+  async sendActivationMail(to, link): Promise<void> {
     try {
       await this.transporter.sendMail({
         from: SMTP_USER,
