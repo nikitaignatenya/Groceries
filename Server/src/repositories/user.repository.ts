@@ -6,7 +6,7 @@ export class UserRepository {
   public async getAllUsers() {
     try {
       const users = await User.findAll();
-      if (users) {
+      if (users.length) {
         return users;
       } else throw new HttpException(404, ExceptionType.DB_USER_GET_NOT_GOT);
     } catch (error) {
