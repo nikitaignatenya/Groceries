@@ -3,7 +3,7 @@ import { MailService } from '@services/mail.service';
 import { TokenService } from './token.service';
 import { TokenRepository } from '@repositories/token.repository';
 import { UserDto } from '@dtos/user.dto';
-import { iUser } from '@interfaces/user.model.interface';
+import { iUser, iUserAttributes } from '@interfaces/user.model.interface';
 import bcrypt from 'bcrypt';
 import uuid from 'uuid';
 import { API_URL } from '@config/dotenv.config';
@@ -17,11 +17,11 @@ export class UserService {
   private tokenService = new TokenService();
   private tokenRepository = new TokenRepository();
 
-  public async getAllUsers() {
+  public async getAllUsers(): Promise<iUserAttributes[]> {
     const users = await this.userRepository.getAllUsers();
     return users;
   }
-  async getUserById(id) {
+  async getUserById(id: number): Promise<iUserAttributes> {
     const user = await this.userRepository.getUserById(id);
     return user;
   }
@@ -31,7 +31,7 @@ export class UserService {
     const activationLink = uuid.v4();
     const user = await this.userRepository.regUser(email, hashPassword, activationLink);
     if (user) {
-      await this.mailService.sendActivationMail(email, `${API_URL}/api/activate/${activationLink}`);
+      await this.mailService.sendActivationMail(email, `${API_URL}/api/user/activate/${activationLink}`);
     } else throw new HttpException(404, ExceptionType.DB_USER_ALREADY_EXISTS);
 
     const userDto = new UserDto(user);
@@ -42,6 +42,11 @@ export class UserService {
       ...tokens,
       user: userDto,
     };
+  }
+
+  async activate(activatedLink: string) {
+    const user = await this.userRepository.activate(activatedLink);
+    return user;
   }
 
   async loginUser() {}

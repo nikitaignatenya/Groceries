@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '@exceptions/HttpException';
+import { buildResponse } from '@helpers/response';
 
 export const errorMiddleware = (error: HttpException, _req: Request, res: Response, next: NextFunction): void => {
   try {
@@ -7,7 +8,7 @@ export const errorMiddleware = (error: HttpException, _req: Request, res: Respon
     const message: string = error.message || 'Something went wrong';
     const id: number = error.id;
 
-    res.status(status).send({ id, message });
+    buildResponse(res, status, { id, message });
   } catch (error) {
     next(error);
   }

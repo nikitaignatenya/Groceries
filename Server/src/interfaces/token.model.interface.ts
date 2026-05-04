@@ -2,7 +2,7 @@ import User from '@models/user.model';
 import { Optional, ForeignKey } from 'sequelize';
 
 export interface iTokenAttributes {
-  id: number;
+  id?: number;
   userId: ForeignKey<User['id']>;
   refreshToken: string;
 }

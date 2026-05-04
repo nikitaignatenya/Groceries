@@ -2,6 +2,8 @@ import { buildResponse } from '@helpers/response';
 import { Request, Response, NextFunction } from 'express';
 export { buildResponse } from '@helpers/response';
 import { UserService } from '@services/user.service';
+import { API_URL, CLIENT_URL } from '@config/dotenv.config';
+import { log } from 'node:console';
 
 class UserController {
   private userService = new UserService();
@@ -16,7 +18,7 @@ class UserController {
   getUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const userData = await this.userService.getUserById(id);
+      const userData = await this.userService.getUserById(Number(id));
       buildResponse(res, 200, userData);
     } catch (error) {
       next(error);
@@ -32,9 +34,20 @@ class UserController {
       next(error);
     }
   };
+
+  activate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const activatedLink = req.params.link;
+      await this.userService.activate(activatedLink);
+      return res.redirect(`https://github.com/nikitaignatenya`);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      buildResponse(res, 200, this.userService.loginUser());
+      buildResponse(res, 200, await this.userService.loginUser());
     } catch (error) {
       next(error);
     }

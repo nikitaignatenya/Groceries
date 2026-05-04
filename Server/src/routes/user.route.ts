@@ -16,7 +16,7 @@ class UserRoute implements iRoutes {
     this.router.post(`/registration`, this.userController.regUser);
     this.router.post(`/login`, this.userController.loginUser);
     this.router.post(`/logout`, this.userController.logoutUser);
-    this.router.post(`/activate/:link`, this.userController.logoutUser);
+    this.router.get(`/activate/:link`, this.userController.activate);
     this.router.post(`/refresh/`, this.userController.logoutUser);
   }
 }

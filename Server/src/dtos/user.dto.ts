@@ -8,7 +8,7 @@ export class UserDto implements iUserDto {
   public email: string;
   public id: number;
   public isActivated: boolean;
-  constructor(model) {
+  constructor(model: any) {
     this.email = model.dataValues.email;
     this.id = model.dataValues.id;
     this.isActivated = model.dataValues.isActivated;

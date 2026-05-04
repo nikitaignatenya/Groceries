@@ -2,19 +2,20 @@ import { ExceptionType } from '@exceptions/exceptions.type';
 import { HttpException } from '@exceptions/HttpException';
 import User from '@models/user.model';
 import { iUserAttributes } from '@interfaces/user.model.interface';
+import { log } from 'node:console';
 export class UserRepository {
-  public async getAllUsers() {
+  public async getAllUsers(): Promise<iUserAttributes[]> {
     try {
       const users = await User.findAll();
       if (users.length) {
         return users;
-      } else throw new HttpException(404, ExceptionType.DB_USER_GET_NOT_GOT);
+      } else throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
     } catch (error) {
-      throw new HttpException(404, { id: 1, message: `${error}` });
+      throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
     }
   }
 
-  public async getUserById(id) {
+  public async getUserById(id: number): Promise<iUserAttributes> {
     try {
       const user = await User.findOne({ where: { id: id } });
       if (user) {
@@ -38,7 +39,19 @@ export class UserRepository {
         return user;
       }
     } catch (error) {
-      throw new HttpException(404, { id: 1, message: `${error}` });
+      throw new HttpException(404, ExceptionType.DB_USER_CREATE_NOT_CREATED);
+    }
+  }
+  public async activate(activatedLink: string) {
+    try {
+      const user = await User.findOne({ where: { activatedLink: activatedLink } });
+      if (user) {
+      } else {
+        throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
+      }
+      return user;
+    } catch (error) {
+      throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
     }
   }
 }
