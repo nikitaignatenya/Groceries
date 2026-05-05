@@ -46,12 +46,23 @@ export class UserRepository {
     try {
       const user = await User.findOne({ where: { activatedLink: activatedLink } });
       if (user) {
+        user.update({ isActivated: true }, { where: { activatedLink: activatedLink } });
+        user.save();
       } else {
         throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
       }
       return user;
     } catch (error) {
       throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
+    }
+  }
+  public async loginUser(email: string) {
+    try {
+      const user = await User.findOne({ where: { email: email } });
+      if (!user) throw new HttpException(404, ExceptionType.DB_USER_EMAIL_NOT_FOUND);
+      return user;
+    } catch (error) {
+      throw new HttpException(404, ExceptionType.DB_USER_GET_BY_EMAIL_NOT_GOT);
     }
   }
 }

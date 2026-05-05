@@ -47,7 +47,10 @@ class UserController {
 
   loginUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      buildResponse(res, 200, await this.userService.loginUser());
+      const { email, password } = req.body;
+      const userData = await this.userService.loginUser(email, password);
+      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+      buildResponse(res, 200, userData);
     } catch (error) {
       next(error);
     }
