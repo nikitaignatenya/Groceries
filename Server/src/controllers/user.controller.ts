@@ -2,8 +2,9 @@ import { buildResponse } from '@helpers/response';
 import { Request, Response, NextFunction } from 'express';
 export { buildResponse } from '@helpers/response';
 import { UserService } from '@services/user.service';
-import { API_URL, CLIENT_URL } from '@config/dotenv.config';
-import { log } from 'node:console';
+import { validationResult } from 'express-validator';
+import { HttpException } from '@exceptions/HttpException';
+import { ExceptionType } from '@exceptions/exceptions.type';
 
 class UserController {
   private userService = new UserService();
@@ -28,7 +29,7 @@ class UserController {
     try {
       const { email, password } = req.body;
       const userData = await this.userService.regUser(email, password);
-      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true });
       buildResponse(res, 200, userData);
     } catch (error) {
       next(error);
@@ -49,7 +50,7 @@ class UserController {
     try {
       const { email, password } = req.body;
       const userData = await this.userService.loginUser(email, password);
-      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
+      res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true });
       buildResponse(res, 200, userData);
     } catch (error) {
       next(error);
