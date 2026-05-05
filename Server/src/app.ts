@@ -28,7 +28,7 @@ class App {
       await sequelize.authenticate();
       await User.sync({ alter: true });
       await Token.sync({ alter: true });
-      
+
       console.log('PostgreSQL connected successfully');
     } catch (error) {
       console.error('Database connection failed:', error);
