@@ -2,7 +2,7 @@ import { UserRepository } from '@repositories/user.repository';
 import { MailService } from '@services/mail.service';
 import { TokenService } from './token.service';
 import { TokenRepository } from '@repositories/token.repository';
-import { UserDto } from '@dtos/user.dto';
+import { iUserDto, UserDto } from '@dtos/user.dto';
 import { iUser, iUserAttributes } from '@interfaces/user.model.interface';
 import bcrypt from 'bcrypt';
 import uuid from 'uuid';
@@ -21,9 +21,10 @@ export class UserService {
     const users = await this.userRepository.getAllUsers();
     return users;
   }
-  async getUserById(id: number): Promise<iUserAttributes> {
+  async getUserById(id: number): Promise<iUserDto> {
     const user = await this.userRepository.getUserById(id);
-    return user;
+    const userDto = new UserDto(user);
+    return userDto;
   }
 
   async regUser(email: string, password: string): Promise<iUser> {
@@ -44,12 +45,25 @@ export class UserService {
     };
   }
 
-  async activate(activatedLink: string) {
+  async activate(activatedLink: string): Promise<iUserDto> {
     const user = await this.userRepository.activate(activatedLink);
-    return user;
+    const userDto = new UserDto(user);
+    return userDto;
   }
 
-  async loginUser() {}
+  async loginUser(email: string, password: string): Promise<iUser> {
+    const user = await this.userRepository.loginUser(email);
+    const hashPassword = user.dataValues.password;
+    if (!(await bcrypt.compare(password, hashPassword))) throw new HttpException(404, ExceptionType.DB_USER_INVALID_PASSWORD);
+    const userDto = new UserDto(user);
+    const tokens = this.tokenService.generateTokens({ ...userDto });
+    await this.tokenRepository.saveToken(userDto.id, tokens.refreshToken);
+
+    return {
+      ...tokens,
+      user: userDto,
+    };
+  }
 
   async logoutUser() {}
 }
