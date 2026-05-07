@@ -3,7 +3,11 @@ import { HttpException } from '@exceptions/HttpException';
 import User from '@models/user.model';
 import { iUserAttributes } from '@interfaces/user.model.interface';
 import { log } from 'node:console';
+import Token from '@models/token.model';
+import { where } from 'sequelize';
+import { TokenRepository } from './token.repository';
 export class UserRepository {
+  private tokenRepository = new TokenRepository();
   public async getAllUsers(): Promise<iUserAttributes[]> {
     try {
       const users = await User.findAll();
@@ -46,12 +50,10 @@ export class UserRepository {
     try {
       const user = await User.findOne({ where: { activatedLink: activatedLink } });
       if (user) {
-        user.update({ isActivated: true }, { where: { activatedLink: activatedLink } });
-        user.save();
+        return user.update({ isActivated: true }, { where: { activatedLink: activatedLink } });
       } else {
         throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
       }
-      return user;
     } catch (error) {
       throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
     }
@@ -65,4 +67,20 @@ export class UserRepository {
       throw new HttpException(404, ExceptionType.DB_USER_GET_BY_EMAIL_NOT_GOT);
     }
   }
+  public async logoutUser(refreshToken: string) {
+    try {
+      return await this.tokenRepository.removeToken(refreshToken);
+    } catch (error) {
+      throw new HttpException(404, { id: 1, message: `${error}` });
+    }
+  }
+  // public async findUserByRefresh(refreshToken: string) {
+  //   try {
+  //     const token = await Token.findOne({ where: { refreshToken: refreshToken } });
+  //     const user = await User.findOne({ where: { id: token.dataValues.userId } });
+  //     return user;
+  //   } catch (error) {
+  //     throw new HttpException(404, { id: 1, message: `${error}` });
+  //   }
+  // }
 }

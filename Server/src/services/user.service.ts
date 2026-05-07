@@ -27,7 +27,7 @@ export class UserService {
     return userDto;
   }
 
-  async regUser(email: string, password: string): Promise<iUser> {
+  public async regUser(email: string, password: string): Promise<iUser> {
     const hashPassword = await bcrypt.hash(password, this.salt);
     const activationLink = uuid.v4();
     const user = await this.userRepository.regUser(email, hashPassword, activationLink);
@@ -45,13 +45,13 @@ export class UserService {
     };
   }
 
-  async activate(activatedLink: string): Promise<iUserDto> {
+  public async activate(activatedLink: string): Promise<iUserDto> {
     const user = await this.userRepository.activate(activatedLink);
     const userDto = new UserDto(user);
     return userDto;
   }
 
-  async loginUser(email: string, password: string): Promise<iUser> {
+  public async loginUser(email: string, password: string): Promise<iUser> {
     const user = await this.userRepository.loginUser(email);
     const hashPassword = user.dataValues.password;
     if (!(await bcrypt.compare(password, hashPassword))) throw new HttpException(404, ExceptionType.DB_USER_INVALID_PASSWORD);
@@ -65,5 +65,25 @@ export class UserService {
     };
   }
 
-  async logoutUser() {}
+  public async logoutUser(refreshToken: string) {
+    await this.userRepository.logoutUser(refreshToken);
+    return 'Success logout';
+  }
+  public async refresh(refreshToken: string) {
+    const validation = await this.tokenService.validateRefreshToken(refreshToken);
+    const token = await this.tokenRepository.findRefreshToken(refreshToken);
+
+    if (!validation && !token) {
+      throw new HttpException(404, ExceptionType.DB_USERS_GET_NOT_GOT);
+    }
+
+    const user = await this.userRepository.getUserById(token.dataValues.userId);
+    const userDto = new UserDto(user);
+    const tokens = this.tokenService.generateTokens({ ...userDto });
+
+    return {
+      ...tokens,
+      userDto,
+    };
+  }
 }

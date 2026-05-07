@@ -9,4 +9,5 @@ export const ExceptionType = {
   DB_USER_EMAIL_NOT_FOUND: { id: 5, message: 'Email not registered' },
   DB_USER_INVALID_EMAIL: { id: 6, message: 'Invalid email format' },
   VALIDATION_ERROR: { id: 7, message: 'Validation failed' },
+  AUTHORIZATION_ERROR: { id: 7, message: 'AUTHORIZATION failed' },
 };
