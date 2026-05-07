@@ -2,12 +2,13 @@ import { buildResponse } from '@helpers/response';
 import { Request, Response, NextFunction } from 'express';
 export { buildResponse } from '@helpers/response';
 import { UserService } from '@services/user.service';
-import { validationResult } from 'express-validator';
+import { TokenService } from '@services/token.service';
 import { HttpException } from '@exceptions/HttpException';
 import { ExceptionType } from '@exceptions/exceptions.type';
 
 class UserController {
   private userService = new UserService();
+  private tokenService = new TokenService();
   getAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const usersData = await this.userService.getAllUsers();
@@ -58,7 +59,20 @@ class UserController {
   };
   logoutUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      buildResponse(res, 200, this.userService.logoutUser());
+      const { refreshToken } = req.cookies;
+      const token = await this.userService.logoutUser(refreshToken);
+      res.clearCookie('refreshToken');
+      buildResponse(res, 200, token);
+    } catch (error) {
+      next(error);
+    }
+  };
+  refresh = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { refreshToken } = req.cookies;
+      const userData = await this.userService.refresh(refreshToken);
+      // res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true });
+      buildResponse(res, 200, userData);
     } catch (error) {
       next(error);
     }
