@@ -1,4 +1,4 @@
-import User from '@models/user.model';
+import User from '@models/user-models/user.model';
 import { Optional, ForeignKey } from 'sequelize';
 
 export interface iTokenAttributes {

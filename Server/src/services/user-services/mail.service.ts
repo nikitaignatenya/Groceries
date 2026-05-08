@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer';
 import { SMTP_HOST, SMTP_PORT, SMTP_PASSWORD, SMTP_USER, API_URL } from '@config/dotenv.config';
 import { HttpException } from '@exceptions/HttpException';
-import { ExceptionType } from '@exceptions/exceptions.type';
+import { ExceptionTypeUser } from '@exceptions/userExceptions.type';
+
 
 export class MailService {
   private transporter;
