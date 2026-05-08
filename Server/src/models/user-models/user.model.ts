@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/database.config';
-import { iUserAttributes, iUserCreationAttributes } from '@interfaces/user.model.interface';
+import { sequelize } from '../../config/database.config';
+import { iUserAttributes, iUserCreationAttributes } from '@interfaces/user-interfaces/user.model.interface';
 
 export class User extends Model<iUserAttributes, iUserCreationAttributes> implements iUserAttributes {
   public id!: number;

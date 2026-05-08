@@ -1,16 +1,16 @@
 import express from 'express';
 import { PORT } from '@config/dotenv.config';
-import { iRoutes, iAppRoute } from '@interfaces/router.interface';
+import { iRoutes, iAppRoute } from '@interfaces/app-interfaces/router.interface';
 import cors from 'cors';
 import { errorMiddleware } from '@middlewares/error.middleware';
 import cookieParser from 'cookie-parser';
 import { sequelize } from '@config/database.config';
-import User from '@models/user.model';
-import Token from '@models/token.model';
+import { initializeModels } from '@helpers/models';
 
 class App {
   public port: number | string;
   public app: express.Application;
+  public models: any;
 
   constructor(routes: Array<iAppRoute>) {
     this.port = PORT || 3000;
@@ -26,9 +26,7 @@ class App {
   private async connectToDatabase(): Promise<void> {
     try {
       await sequelize.authenticate();
-      await User.sync({ alter: true });
-      await Token.sync({ alter: true });
-
+      await initializeModels();
       console.log('PostgreSQL connected successfully');
     } catch (error) {
       console.error('Database connection failed:', error);

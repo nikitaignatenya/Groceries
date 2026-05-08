@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { HttpException } from '@exceptions/HttpException';
-import { buildResponse } from '@helpers/response';
-import { ExceptionType } from '@exceptions/exceptions.type';
+import { ExceptionTypeUser } from '@exceptions/userExceptions.type';
+
 
 import { iValidationMessage } from '@exceptions/HttpException';
 
@@ -32,7 +32,7 @@ export const validationMiddleware = (req: Request, res: Response, next: NextFunc
       });
     }
     if (errorsArray.length) {
-      throw new HttpException(404, ExceptionType.VALIDATION_ERROR, errorsArray);
+      throw new HttpException(404, ExceptionTypeUser.VALIDATION_ERROR, errorsArray);
     }
     next();
   } catch (error) {

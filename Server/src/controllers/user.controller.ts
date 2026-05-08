@@ -1,14 +1,11 @@
 import { buildResponse } from '@helpers/response';
 import { Request, Response, NextFunction } from 'express';
 export { buildResponse } from '@helpers/response';
-import { UserService } from '@services/user.service';
-import { TokenService } from '@services/token.service';
-import { HttpException } from '@exceptions/HttpException';
-import { ExceptionType } from '@exceptions/exceptions.type';
+import { UserService } from '@services/user-services/user.service';
+import { TokenService } from '@services/user-services/token.service';
 
 class UserController {
   private userService = new UserService();
-  private tokenService = new TokenService();
   getAllUsers = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const usersData = await this.userService.getAllUsers();

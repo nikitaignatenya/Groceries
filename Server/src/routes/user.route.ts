@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { iRoutes } from '@interfaces/router.interface';
+import { iRoutes } from '@interfaces/app-interfaces/router.interface';
 import UserController from '@controllers/user.controller';
 import { validationMiddleware } from '@middlewares/validation.middleware';
 import { authMiddleware } from '@middlewares/auth.middleware';

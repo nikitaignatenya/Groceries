@@ -1,4 +1,4 @@
-export const ExceptionType = {
+export const ExceptionTypeUser = {
   DB_USER_CREATE_NOT_CREATED: { id: 1, message: 'DB not created USER' },
   DB_USER_ALREADY_EXISTS: { id: 2, message: 'User with this email already exists' },
   DB_USERS_GET_NOT_GOT: { id: 1, message: 'DB not got USERS' },
